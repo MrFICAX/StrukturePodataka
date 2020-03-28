@@ -1,0 +1,1 @@
+Obzirom da je probna lab vezba nadogradio sam ovaj zadatak dodatnom funkcijom koja se poziva unutar Add i Mul funkcija. Znam da je nefunkcionalno, cilj mi je bio da probam rad sa pointerima i referencama pri pozivu funkcije unutar funkcija. Isao sam do ekstremnih slucajeva(bar meni tako izgleda).  
