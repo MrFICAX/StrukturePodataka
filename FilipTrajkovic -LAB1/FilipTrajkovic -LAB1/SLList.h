@@ -25,8 +25,8 @@ public:
 	N VratiSlElement(N e);
 	void Stampaj();
 	void ObrisiElement(N e);
-	void Update(int oldInfo, int newInfo);
 	void sort();
+	void Update(int oldInfo, int newInfo);
 };
 
 template<class N>
@@ -34,7 +34,6 @@ SLList<N>::~SLList<N>() {
 	while (!Prazno())
 		N trenutni = ObrisiSaHead();
 }
-
 template<class N>
 void SLList<N>::DodajNaHead(N e) {
 	head = new SLLNode<N>(e, head);
@@ -43,13 +42,16 @@ void SLList<N>::DodajNaHead(N e) {
 }
 template <class N>
 void SLList<N>::DodajNaTail(N e) {
-	if (!Prazno())
-	{
-		tail->next = new SLLNode<N>(e);
-		tail = tail->next;
-	}
-	else
-		head = tail = new SLLNode<N>(e);
+		if (Prazno())
+		{
+			head = tail = new SLLNode<N>(e);
+			return;
+		}
+		else
+		{
+			tail->next = new SLLNode<N>(e);
+			tail = tail->next;
+		}
 }
 template<class N>
 N SLList<N>::ObrisiSaHead() {
@@ -74,7 +76,8 @@ N SLList<N>::ObrisiSaTail() {
 		head = tail = NULL;
 	else
 	{
-		for (SLLNode<N>* trenutniZaObilazak = head; trenutniZaObilazak->next != tail; trenutniZaObilazak = trenutniZaObilazak->next)
+		SLLNode<N>* trenutniZaObilazak;
+		for (trenutniZaObilazak = head; trenutniZaObilazak->next != NULL; trenutniZaObilazak = trenutniZaObilazak->next)
 			tail = trenutniZaObilazak;
 		tail->next = NULL;
 	}
@@ -117,43 +120,49 @@ N SLList<N>::VratiSlElement(N e) {
 	if (Prazno())
 		throw new exception("Lista prazna!");
 	SLLNode<N>* trenutni = head;
-	while (trenutni->info != e)
+	while ( trenutni !=NULL && trenutni->info != e)
 		trenutni = trenutni->next;
-	return trenutni->next->info;
+	if (trenutni == NULL)
+	{
+		cout << "Trazeni broj nije u listi! ";
+		return -1;
+	}
+	else
+		return trenutni->next->info;
 }
 template<class N>
 void SLList<N>::Stampaj() {
 	cout << "Lista: " << endl;
 	for (SLLNode<N>* trenutni = head; trenutni != NULL; trenutni = trenutni->next)
-		cout << trenutni->stampajElement()<<" ";
+		cout << trenutni->stampajElement() << " ";
 	cout << endl;
 }
 template<class N>
 void SLList<N>::ObrisiElement(N e) {
+	SLLNode<N>* trenutni = head;
+	SLLNode<N>* prethodni = NULL;
 	if (Prazno())
 		throw new exception("Prazna lista!");
-	if (head == tail && head->info.Jednaki(e))
+	if (head == tail && head->Jednaki(e))
 	{
 		delete head;
 		head = tail = NULL;
 	}
-	else if (e = head->info)
+	else if (e == head->info)
 	{
 		SLLNode<N>* trenutni = head;
 		head = head->next;
 		delete trenutni;
 	}
-}
-template<class N>
-void SLList<N>::Update(int oldInfo, int newInfo)
-{
-	SLLNode<N>* trenutni;
-	for (trenutni = head; trenutni != NULL; trenutni = trenutni->next)
+	else
 	{
-		if (trenutni->info == oldInfo)
+		while (trenutni != NULL && trenutni->info != e)
 		{
-			trenutni->info = newInfo;
+			prethodni = trenutni;
+			trenutni = trenutni->next;
 		}
+		prethodni->next = trenutni->next;
+		delete trenutni;
 	}
 }
 template<class N>
@@ -185,3 +194,79 @@ void  SLList<N>::sort()
 	}
 }
 
+template<class N>
+void SLList<N>::Update(int oldInfo, int newInfo)
+{
+	SLLNode<N>* trenutni;
+	SLLNode<N>* prethodni = NULL;
+	SLLNode<N>* pomocni;
+
+	trenutni = head;
+	while (trenutni!=NULL && trenutni->info != oldInfo)
+	{
+		prethodni = trenutni;
+		trenutni = trenutni->next;
+	}
+
+	if (trenutni == NULL)
+		return;
+	if (prethodni == NULL)
+	{
+		trenutni->next = head;
+		head = trenutni;
+	}
+
+	
+	if (trenutni->info == oldInfo)
+	{
+		trenutni->info = newInfo;
+	}
+		
+	if (prethodni!=NULL && prethodni->info > trenutni->info)
+	{
+		
+		prethodni->next = trenutni->next;
+		prethodni = NULL;
+		pomocni = head;
+
+		while (pomocni->info < trenutni->info)
+		{
+			prethodni = pomocni;
+			pomocni = pomocni->next;
+		}
+
+		if (prethodni == nullptr)
+		{
+			trenutni->next = head;
+			head = trenutni;
+		}
+		else
+		{
+			prethodni->next = trenutni;
+			trenutni->next = pomocni;
+		}	
+	}
+	else if ( prethodni != NULL && trenutni->info > trenutni->next->info)
+	{
+		prethodni->next = trenutni->next;
+		prethodni = trenutni->next;
+		pomocni = trenutni->next->next;
+
+		while (pomocni != nullptr && trenutni->info > pomocni->info)
+		{
+			prethodni = pomocni;
+			pomocni = pomocni->next;
+		}
+
+		if (pomocni == nullptr)
+		{
+			prethodni->next = trenutni;
+			trenutni->next = NULL;
+		}
+		else
+		{
+			trenutni->next = pomocni;
+			prethodni->next = trenutni;
+		}
+	}
+}
