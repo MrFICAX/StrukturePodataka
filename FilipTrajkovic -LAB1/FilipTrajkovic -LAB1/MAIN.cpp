@@ -14,7 +14,7 @@ int main() {
 		NovaLista->ObrisiSaTail();
 		NovaLista->Stampaj();
 
-		NovaLista->Update(8, 4);
+		NovaLista->Update(6, 4);
 		NovaLista->Stampaj();
 	
 		NovaLista->Update(10, 15);
@@ -26,11 +26,11 @@ int main() {
 		NovaLista->Update(9, 17);
 		NovaLista->Stampaj();
 		cout << "------------------------" << endl;
-		cout << "DODAVANJE NA TAIL" << endl;
+		cout << "DODAVANJE NA TAIL --- FUNKCIJA AUTOMATSKI SORTIRA LISTU!" << endl;
 		NovaLista->DodajNaTail(2); 
 		NovaLista->Stampaj();
 	
-		cout << "DODAVANJE NA TAIL" << endl;
+		cout << "DODAVANJE NA TAIL --- FUNKCIJA AUTOMATSKI SORTIRA LISTU!" << endl;
 		NovaLista->DodajNaTail(33);
 		NovaLista->Stampaj();
 
@@ -48,8 +48,10 @@ int main() {
 
 		cout << "Vracen element sa head-a: " << endl;
 		tmp = NovaLista->VratiHead();
-		cout << tmp->info << endl;
+		cout << tmp->info << endl<<endl<<endl;
 	
+		cout << "Zadatak sadrzi sort metodu, koja je samo dodata kao standardna ugradjena funkcija"<<endl; 
+		cout << "ali je ni u jednom nacinu ne koristim za sredjivanje liste!" << endl;
 	}
 	catch (string* g)
 	{

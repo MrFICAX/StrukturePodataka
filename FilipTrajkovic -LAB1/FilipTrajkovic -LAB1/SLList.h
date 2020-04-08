@@ -49,8 +49,38 @@ void SLList<N>::DodajNaTail(N e) {
 		}
 		else
 		{
+			SLLNode<N>* pomocni = tail;
 			tail->next = new SLLNode<N>(e);
 			tail = tail->next;
+			if (pomocni->info > tail->info)
+			{
+				pomocni = NULL;
+				SLLNode<N>* trenutni = head;
+				SLLNode<N>* prethodniTaila = head;
+
+				while (prethodniTaila->next != tail)
+					prethodniTaila = prethodniTaila->next;
+
+				if (trenutni->info >= tail->info)
+				{
+					this->DodajNaHead(e);
+					this->ObrisiSaTail();
+					return;
+				}
+				while (trenutni != NULL && trenutni->info < tail->info)
+				{
+					pomocni = trenutni;
+					trenutni = trenutni->next;
+				}
+				if (trenutni == NULL)
+					return;
+				
+				prethodniTaila->next->next = pomocni->next;
+				pomocni->next = prethodniTaila->next;
+				tail = prethodniTaila;
+				tail->next = NULL;
+
+			}
 		}
 }
 template<class N>
@@ -212,8 +242,8 @@ void SLList<N>::Update(int oldInfo, int newInfo)
 		return;
 	if (prethodni == NULL)
 	{
-		trenutni->next = head;
-		head = trenutni;
+		trenutni->info = newInfo;
+		return;
 	}
 
 	
@@ -262,6 +292,7 @@ void SLList<N>::Update(int oldInfo, int newInfo)
 		{
 			prethodni->next = trenutni;
 			trenutni->next = NULL;
+			tail = trenutni;
 		}
 		else
 		{
