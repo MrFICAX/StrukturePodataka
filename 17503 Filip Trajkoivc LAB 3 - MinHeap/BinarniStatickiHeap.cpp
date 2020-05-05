@@ -115,10 +115,6 @@ void BinarniStatickiHeap::stampajPoSirini() {
 			cout << "Heap je prazan!";
 		}
 	}
-	else
-	{
-		return;
-	}
 }
 void BinarniStatickiHeap::stampajPoDubini(int el) {
 	if (brojEl == 0) {
